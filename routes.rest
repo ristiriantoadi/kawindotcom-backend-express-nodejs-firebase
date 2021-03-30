@@ -6,6 +6,10 @@ POST http://localhost:5000/acara/baru
 Content-Type: application/json
 
 {
-    "name":"Amazing Person",
-    "subscribedToChannel":"Web Dev Simplified"
+    "namaPria":"Farhan Yakub Bawazier",
+    "namaWanita":"Ida",
+    "latitude":"0-01-021-0121",
+    "longitude": "0-01-021-1223",
+    "dresscode": "gray",
+    "waktuAcara": "10020303010"
 }

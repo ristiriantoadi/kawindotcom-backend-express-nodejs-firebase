@@ -10,8 +10,6 @@ admin.initializeApp({
 });
 
 app.use(express.json())
-// app.use()
-
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -19,17 +17,14 @@ app.get('/', (req, res) => {
 
 app.post('/acara/baru', (req, res) => {
     var db = admin.database();
-    var ref = db.ref("/coba");
-    var usersRef = ref.child("users");
-    usersRef.set({
-        alanisawesome: {
-            date_of_birth: "June 23, 1912",
-            full_name: req.body.name
-        },
-        gracehop: {
-            date_of_birth: "December 9, 1906",
-            full_name: "Grace Hopper"
-        }
+    var acaraRef = db.ref("/acara");
+    acaraRef.push().set({
+        "namaPria": req.body.namaPria,
+        "namaWanita":req.body.namaWanita,
+        "latitude":req.body.latitude,
+        "longitude": req.body.longitude,
+        "dresscode": req.body.dresscode,
+        "waktuAcara": req.body.waktuAcara
     });
 })
 
