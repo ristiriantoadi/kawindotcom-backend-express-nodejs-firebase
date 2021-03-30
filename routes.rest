@@ -13,3 +13,21 @@ Content-Type: application/json
     "dresscode": "gray",
     "waktuAcara": "10020303010"
 }
+
+###
+
+POST http://localhost:5000/acara/-MX-ypFdNBOA95Jr2ETo/invitee/baru
+Content-Type: application/json
+
+{
+    "invitees":[
+        {
+            "namaLengkap": "Hanim Pranata",
+            "email":"hanimpranata@gmail.com"
+        },
+                {
+            "namaLengkap": "Ita Windriarti P",
+            "email":"itawindriartip@gmail.com"
+        }
+    ]
+}

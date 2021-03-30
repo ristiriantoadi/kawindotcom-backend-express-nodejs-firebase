@@ -15,6 +15,20 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+app.post('/acara/:idAcara/invitee/baru', (req, res) => {
+    // console.log(req.body.invitees)
+    var db = admin.database();
+    var acaraRef = db.ref("/acara/"+req.params.idAcara+"/invitees");
+    req.body.invitees.forEach((invitee)=>{
+        acaraRef.push().set({
+            "namaLengkap": invitee.namaLengkap,
+            "email": invitee.email
+        });    
+    
+    });
+
+})
+
 app.post('/acara/baru', (req, res) => {
     var db = admin.database();
     var acaraRef = db.ref("/acara");
