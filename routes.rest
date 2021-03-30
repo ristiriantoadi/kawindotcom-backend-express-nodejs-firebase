@@ -1,0 +1,11 @@
+GET http://localhost:5000/
+
+###
+
+POST http://localhost:5000/acara/baru
+Content-Type: application/json
+
+{
+    "name":"Amazing Person",
+    "subscribedToChannel":"Web Dev Simplified"
+}
