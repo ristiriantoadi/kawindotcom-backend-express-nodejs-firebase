@@ -16,7 +16,6 @@ app.get('/', (req, res) => {
 })
 
 app.post('/acara/:idAcara/invitee/baru', (req, res) => {
-    // console.log(req.body.invitees)
     var db = admin.database();
     var acaraRef = db.ref("/acara/"+req.params.idAcara+"/invitees");
     req.body.invitees.forEach((invitee)=>{
@@ -40,6 +39,15 @@ app.post('/acara/baru', (req, res) => {
         "dresscode": req.body.dresscode,
         "waktuAcara": req.body.waktuAcara
     });
+})
+
+app.post('/register', (req, res) => {
+})
+
+app.post('/login', (req, res) => {
+})
+
+app.post('/logout', (req, res) => {
 })
 
 app.listen(port, () => {
