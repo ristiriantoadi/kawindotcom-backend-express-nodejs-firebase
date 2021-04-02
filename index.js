@@ -48,7 +48,7 @@ app.get('/dashboard',verifyToken, (req, res) => {
   })
 })
 
-app.post('/acara/baru', (req, res) => {
+app.post('/acara/baru', verifyToken, (req, res) => {
     var db = admin.database();
     var acaraRef = db.ref("/acara");
     acaraRef.push().set({
@@ -66,14 +66,9 @@ app.post('/acara/baru', (req, res) => {
 })
 
 app.post('/acara/:idAcara/edit', verifyToken, (req, res) => {
-  
-  // if(req.decodedToken.email == )
-  
   var db = admin.database();
   var acaraRef = db.ref("/acara/"+req.params.idAcara);
   acaraRef.once("value", function(data) {
-    // do some stuff once
-    // console.log("data",data.val())
     var acaraUserEmail = data.val().userEmail
     var tokenUserEmail = req.decodedToken.email
     if(acaraUserEmail == tokenUserEmail){
@@ -96,19 +91,40 @@ app.post('/acara/:idAcara/edit', verifyToken, (req, res) => {
   });
 })
 
-app.post('/acara/:idAcara/invitee/baru', (req, res) => {
+app.post('/acara/:idAcara/invitee/baru', verifyToken, (req, res) => {
   var db = admin.database();
-  var acaraRef = db.ref("/acara/"+req.params.idAcara+"/invitees");
-  req.body.invitees.forEach((invitee)=>{
-      acaraRef.push().set({
+  // var acaraRef = db.ref("/acara/"+req.params.idAcara+"/invitees");
+  var acaraRef = db.ref("/acara/"+req.params.idAcara);
+  acaraRef.once("value", function(data) {
+    var acaraUserEmail = data.val().userEmail
+    var tokenUserEmail = req.decodedToken.email
+    if(acaraUserEmail == tokenUserEmail){
+      acaraRef = db.ref("/acara/"+req.params.idAcara+"/invitees");
+      req.body.invitees.forEach((invitee)=>{
+        acaraRef.push().set({
           "namaLengkap": invitee.namaLengkap,
           "email": invitee.email
-      });    
-  
+        });    
+      });
+      return res.json({
+        'message':"invitees ditambahkan",
+      })
+    }else{
+      return res.json({
+        'message':"user tidak memiliki hak menambahkan invitees untuk acara yang dibuat user lain",
+      })
+    }
   });
-  return res.json({
-    'message':"invitees ditambahkan",
-  })
+  // req.body.invitees.forEach((invitee)=>{
+  //     acaraRef.push().set({
+  //         "namaLengkap": invitee.namaLengkap,
+  //         "email": invitee.email
+  //     });    
+  
+  // });
+  // return res.json({
+  //   'message':"invitees ditambahkan",
+  // })
 })
 
 

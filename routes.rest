@@ -4,6 +4,7 @@ GET http://localhost:5000/
 
 POST http://localhost:5000/acara/baru
 Content-Type: application/json
+id-token: eyJhbGciOiJSUzI1NiIsImtpZCI6IjhkOGM3OTdlMDQ5YWFkZWViOWM5M2RiZGU3ZDAwMzJmNjk3NjYwYmQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vYW5ndWxhci05NjI5OSIsImF1ZCI6ImFuZ3VsYXItOTYyOTkiLCJhdXRoX3RpbWUiOjE2MTczNjM5NjgsInVzZXJfaWQiOiJoZ1B6eWVhUXhrUVlpMHQ5Mk8ycTMzeHdySW8xIiwic3ViIjoiaGdQenllYVF4a1FZaTB0OTJPMnEzM3h3cklvMSIsImlhdCI6MTYxNzM2Mzk3MSwiZXhwIjoxNjE3MzY3NTcxLCJlbWFpbCI6ImZhcmhhbnlha3ViQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJmYXJoYW55YWt1YkBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.CsmYMMUD0_9OC4l6cbH3IvQiCghhi9Q34todDlRe6ErhtgAbgoSBzZ_YoiaKBj_C-6e182KFdRePt5Hysdi0ao-13iFIW2NrAJvfpyvm6ckiodeFqcXFbGjBXCAMRIjnnfCowazPeVhVpfQfOojHSgMWS1AMvKh6eXK59sr9zZEwHK_ya5U8wCG0JvtuB57Rd198MnZcTjFBO0Z5hdczp4wneG0If9emsaMsOiYxaLVwz4INY1xUWIDGMM_eQYryA82H2KMxtPaZE-rYsoV3mSBHdIUtYzJkKkPBk_0m9okgGYmT_YRM-tNMJ2_nOfL9SxiOmel4cubKLeWiLpstnQ
 
 {
     "namaPria":"Farhan Yakub Bawazier",
@@ -13,49 +14,6 @@ Content-Type: application/json
     "dresscode": "gray",
     "waktuAcara": "10020303010"
 }
-
-###
-
-POST http://localhost:5000/acara/-MX-ypFdNBOA95Jr2ETo/invitee/baru
-Content-Type: application/json
-
-{
-    "invitees":[
-        {
-            "namaLengkap": "Hanim Pranata",
-            "email":"hanimpranata@gmail.com"
-        },
-                {
-            "namaLengkap": "Ita Windriarti P",
-            "email":"itawindriartip@gmail.com"
-        }
-    ]
-}
-
-###
-
-POST http://localhost:5000/register
-Content-Type: application/json
-
-{
-    "email":"farhanyakub@gmail.com",
-    "password":"12345678"
-}
-
-###
-
-POST http://localhost:5000/login
-Content-Type: application/json
-
-{
-    "email":"ristiriantoadi@gmail.com",
-    "password":"12345678"
-}
-
-###
-
-GET http://localhost:5000/dashboard
-id-token: eyJhbGciOiJSUzI1NiIsImtpZCI6IjhkOGM3OTdlMDQ5YWFkZWViOWM5M2RiZGU3ZDAwMzJmNjk3NjYwYmQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vYW5ndWxhci05NjI5OSIsImF1ZCI6ImFuZ3VsYXItOTYyOTkiLCJhdXRoX3RpbWUiOjE2MTczNTk0MTgsInVzZXJfaWQiOiJoZ1B6eWVhUXhrUVlpMHQ5Mk8ycTMzeHdySW8xIiwic3ViIjoiaGdQenllYVF4a1FZaTB0OTJPMnEzM3h3cklvMSIsImlhdCI6MTYxNzM1OTcxNywiZXhwIjoxNjE3MzYzMzE3LCJlbWFpbCI6ImZhcmhhbnlha3ViQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJmYXJoYW55YWt1YkBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.cazRRoFUKVQSNkTFfKv8wIMQEEOoG97daXOOCQEi3NXPjbDcWvCskoIDk6WjoYfzYEmtyaoo-vEDDqJrUWnwzdob6U133nvQJgJF0kzkeA6_61drhOh0SPXqPBndzneUb9pmo47n55wygqD48FS3__aBaeDC_CGZ1pBam38chUaVa_H31EZ-Les0JWEZu5PW8MtrRE0A0xe6_8Yn0d3iotsaMmFKK6BFBoQP9njbWac83YhYAgAy5VBRf9TMtHZpNYcbucx1gQeKRuj6elC9VV34oVz0T1Ur3nT0tm2zpNAOTBAjwD-rAKH8t1V_g0xvH8h_KvVydiEoeQC
 
 ###
 
@@ -71,3 +29,28 @@ id-token: eyJhbGciOiJSUzI1NiIsImtpZCI6IjhkOGM3OTdlMDQ5YWFkZWViOWM5M2RiZGU3ZDAwMz
     "dresscode": "gray",
     "waktuAcara": "10020303010"
 }
+
+###
+
+POST http://localhost:5000/acara/-MX-ypFdNBOA95Jr2ETo/invitee/baru
+Content-Type: application/json
+id-token: eyJhbGciOiJSUzI1NiIsImtpZCI6IjhkOGM3OTdlMDQ5YWFkZWViOWM5M2RiZGU3ZDAwMzJmNjk3NjYwYmQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vYW5ndWxhci05NjI5OSIsImF1ZCI6ImFuZ3VsYXItOTYyOTkiLCJhdXRoX3RpbWUiOjE2MTczNjM5NjgsInVzZXJfaWQiOiJoZ1B6eWVhUXhrUVlpMHQ5Mk8ycTMzeHdySW8xIiwic3ViIjoiaGdQenllYVF4a1FZaTB0OTJPMnEzM3h3cklvMSIsImlhdCI6MTYxNzM2NDkwNSwiZXhwIjoxNjE3MzY4NTA1LCJlbWFpbCI6ImZhcmhhbnlha3ViQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJmYXJoYW55YWt1YkBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.jr6ZCoUVF8ByQ4n2kwwyJoeFYcsVWJhbz5rRACaYKxPejeQaQS94USgfWeqirEngXushim9cw_XRiQ2iisabAJs20xD3yrcz6EVkb5dHEBpfGEWnB0wgEBNcCb6JxPV3qKeeDkxHHDjiLIy6u49EbDtUhDRtllZB1tXIY4q_kNmRRnpe4qG-7xn_xL3aE9qLv2GrkT2peaGkJyp5osOF7QSeK4kZuAJZJryaT8YPhfXm3nOMhxAg48WdJ5hyWEP3WPLao0h_Dbl8oy0C3yarX14JYgIUtG-OTZUIdMgoBG8PydFyJCrSQjFHlVCwv52N4xBbftD_d3SNWR7aMgDfdQ
+
+{
+    "invitees":[
+        {
+            "namaLengkap": "Ida Pratiwi",
+            "email":"idapratiwi@gmail.com"
+        },
+                {
+            "namaLengkap": "Yundariana",
+            "email":"yundariana@gmail.com"
+        }
+    ]
+}
+
+###
+
+GET http://localhost:5000/dashboard
+id-token: eyJhbGciOiJSUzI1NiIsImtpZCI6IjhkOGM3OTdlMDQ5YWFkZWViOWM5M2RiZGU3ZDAwMzJmNjk3NjYwYmQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vYW5ndWxhci05NjI5OSIsImF1ZCI6ImFuZ3VsYXItOTYyOTkiLCJhdXRoX3RpbWUiOjE2MTczNTk0MTgsInVzZXJfaWQiOiJoZ1B6eWVhUXhrUVlpMHQ5Mk8ycTMzeHdySW8xIiwic3ViIjoiaGdQenllYVF4a1FZaTB0OTJPMnEzM3h3cklvMSIsImlhdCI6MTYxNzM1OTcxNywiZXhwIjoxNjE3MzYzMzE3LCJlbWFpbCI6ImZhcmhhbnlha3ViQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJmYXJoYW55YWt1YkBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.cazRRoFUKVQSNkTFfKv8wIMQEEOoG97daXOOCQEi3NXPjbDcWvCskoIDk6WjoYfzYEmtyaoo-vEDDqJrUWnwzdob6U133nvQJgJF0kzkeA6_61drhOh0SPXqPBndzneUb9pmo47n55wygqD48FS3__aBaeDC_CGZ1pBam38chUaVa_H31EZ-Les0JWEZu5PW8MtrRE0A0xe6_8Yn0d3iotsaMmFKK6BFBoQP9njbWac83YhYAgAy5VBRf9TMtHZpNYcbucx1gQeKRuj6elC9VV34oVz0T1Ur3nT0tm2zpNAOTBAjwD-rAKH8t1V_g0xvH8h_KvVydiEoeQC
+
