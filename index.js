@@ -92,6 +92,35 @@ app.post('/acara/:idAcara/edit', verifyToken, (req, res) => {
   });
 })
 
+app.post('/acara/:idAcara/delete', verifyToken, (req, res) => {
+  //delete acara
+  var db = admin.database();
+  var acaraRef = db.ref("/acara/"+req.params.idAcara);
+  acaraRef.once("value", function(data) {
+    var acaraUserEmail = data.val().userEmail
+    var tokenUserEmail = req.decodedToken.email
+    if(acaraUserEmail == tokenUserEmail){
+      acaraRef.remove()
+      .then(()=>{
+        return res.json({
+          'message':"acara berhasil dihapus",
+        })  
+      })
+      .catch(function(error) {
+        console.log('Error deleting data:', error);
+        // res.send({ status: 'error', error: error });
+        return res.json({
+          'message': "error hapus data",
+        })  
+      });
+    }else{
+      return res.json({
+        'message':"user tidak memiliki hak menghapus acara yang dibuat user lain",
+      })
+    }
+  });
+})
+
 app.post('/acara/:idAcara/invitee/baru', verifyToken, (req, res) => {
   var db = admin.database();
   // var acaraRef = db.ref("/acara/"+req.params.idAcara+"/invitees");
