@@ -23,14 +23,15 @@ function verifyToken(req,res,next){
   .verifyIdToken(idToken)
   .then((decodedToken) => {
     const uid = decodedToken.uid;
-    // console.log("decodedToken", decodedToken)
-    // ...
     req.decodedToken = decodedToken
     next()
   })
   .catch((error) => {
     // Handle error
-    console.log("error",error)
+    // console.log("error",error)
+    return res.json({
+      'message':"invalid id token",
+    })
   });
 }
 
