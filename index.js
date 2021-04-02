@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT || 5000
 const https = require('https')
+const path = require('path');
 
 var admin = require('firebase-admin');
 var serviceAccount = require("./serviceAccountKey.json");
@@ -11,6 +12,25 @@ admin.initializeApp({
 });
 
 app.use(express.json())
+
+//middleware function
+function verifyToken(req,res,next){
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+
+  if (token ==null){
+      return res.sendStatus(401)//unauthorized or unauthenticated
+  }
+
+  jwt.verify(token,SECRET_KEY,(err,user)=>{
+      if(err){
+          return res.sendStatus(403)//forbidden
+      }
+      req.user = user
+      next()
+  })
+}
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -82,7 +102,8 @@ app.post('/register', (req, res) => {
   request.end()
 })
 
-app.post('/login', (req, res) => {
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname + '/login.html'));
 })
 
 app.post('/logout', (req, res) => {

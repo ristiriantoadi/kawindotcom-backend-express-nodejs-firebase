@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>LOGIN</h1>
+    <form id="loginForm">
+        <label for="email">Email:</label><br>
+        <input type="text" id="email" name="email" placeholder="email ..."><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" placeholder="password ..."><br>
+        <input type="submit" value="Submit">
+    </form>
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-auth.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+          apiKey: "AIzaSyAWIsYFgzYWklXThsgMOTI5d7TdGe_acUw",
+          authDomain: "angular-96299.firebaseapp.com",
+          databaseURL: "https://angular-96299.firebaseio.com",
+          projectId: "angular-96299",
+          storageBucket: "angular-96299.appspot.com",
+          messagingSenderId: "147209582557",
+          appId: "1:147209582557:web:2de7674411b46015dfa834"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <script>   
+        var form = document.getElementById("loginForm");
+        form.addEventListener('submit',(e)=>{
+            e.preventDefault()
+            var email = document.getElementById("email").value
+            var password = document.getElementById("password").value
+            console.log("Email",email)
+            console.log("Password",password) 
+            firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // Signed in
+                var user = userCredential.user;
+                // console.log("user",user)
+                console.log("user id token",user.idToken)
+                // ...
+            })
+            .catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log("error code",errorCode)
+                console.log("error message",errorMessage)
+            });
+        })
+    </script>
+</body>
+</html>
