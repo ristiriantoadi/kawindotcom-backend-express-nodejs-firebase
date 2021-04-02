@@ -7,11 +7,11 @@ Content-Type: application/json
 id-token: eyJhbGciOiJSUzI1NiIsImtpZCI6IjhkOGM3OTdlMDQ5YWFkZWViOWM5M2RiZGU3ZDAwMzJmNjk3NjYwYmQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vYW5ndWxhci05NjI5OSIsImF1ZCI6ImFuZ3VsYXItOTYyOTkiLCJhdXRoX3RpbWUiOjE2MTczNjM5NjgsInVzZXJfaWQiOiJoZ1B6eWVhUXhrUVlpMHQ5Mk8ycTMzeHdySW8xIiwic3ViIjoiaGdQenllYVF4a1FZaTB0OTJPMnEzM3h3cklvMSIsImlhdCI6MTYxNzM2Mzk3MSwiZXhwIjoxNjE3MzY3NTcxLCJlbWFpbCI6ImZhcmhhbnlha3ViQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJmYXJoYW55YWt1YkBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.CsmYMMUD0_9OC4l6cbH3IvQiCghhi9Q34todDlRe6ErhtgAbgoSBzZ_YoiaKBj_C-6e182KFdRePt5Hysdi0ao-13iFIW2NrAJvfpyvm6ckiodeFqcXFbGjBXCAMRIjnnfCowazPeVhVpfQfOojHSgMWS1AMvKh6eXK59sr9zZEwHK_ya5U8wCG0JvtuB57Rd198MnZcTjFBO0Z5hdczp4wneG0If9emsaMsOiYxaLVwz4INY1xUWIDGMM_eQYryA82H2KMxtPaZE-rYsoV3mSBHdIUtYzJkKkPBk_0m9okgGYmT_YRM-tNMJ2_nOfL9SxiOmel4cubKLeWiLpstnQ
 
 {
-    "namaPria":"Farhan Yakub Bawazier",
-    "namaWanita":"Ida",
+    "namaPria":"Bayu Bagaskara",
+    "namaWanita":"Lulu Lilaka",
     "latitude":"0-01-021-0121",
     "longitude": "0-01-021-1223",
-    "dresscode": "gray",
+    "dresscode": "sunny",
     "waktuAcara": "10020303010"
 }
 

@@ -57,7 +57,8 @@ app.post('/acara/baru', verifyToken, (req, res) => {
         "latitude":req.body.latitude,
         "longitude": req.body.longitude,
         "dresscode": req.body.dresscode,
-        "waktuAcara": req.body.waktuAcara
+        "waktuAcara": req.body.waktuAcara,
+        "userEmail":req.decodedToken.email
     });
 
     return res.json({
