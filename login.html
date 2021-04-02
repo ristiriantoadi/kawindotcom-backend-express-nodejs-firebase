@@ -15,6 +15,8 @@
         <input type="submit" value="Submit">
     </form>
     <button style="display: none;" id="logout">Logout</button>
+    <button style="display: none;" id="dashboard">Go To Dashboard</button>
+    <button style="display: none;" id="getIdToken">Get Id Token</button>
     <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
     <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
@@ -48,6 +50,8 @@
                 var user = userCredential.user;
                 console.log("user",user)
                 document.getElementById("logout").style.display="inline-block"
+                document.getElementById("dashboard").style.display="inline-block"
+                document.getElementById("getIdToken").style.display="inline-block"
                 // console.log("user id token",user.idToken)
                 // ...
             })
@@ -63,9 +67,44 @@
             firebase.auth().signOut().then(() => {
                 // Sign-out successful.
                 document.getElementById("logout").style.display="none"
+                document.getElementById("dashboard").style.display="none"
+                document.getElementById("getIdToken").style.display="none" 
                 console.log("sign out successful")
             }).catch((error) => {
                 // An error happened.
+                console.log("error",error)
+            });
+        })
+        document.getElementById("dashboard").addEventListener("click",()=>{
+            //get the token first
+            firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+                // Send token to your backend via HTTPS
+                console.log("idToken",idToken)
+                fetch("http://localhost:5000/dashboard",{
+                    method:"GET",
+                    headers: {
+                        "id-token":idToken
+                    }
+                })
+                .then(res=>{
+                    return res.json()
+                })
+                .then(data=>{
+                    console.log("data",data)
+                })
+                .catch((error)=>{
+                    console.log("fetch error",error)
+                });
+            }).catch(function(error) {
+                // Handle error
+                console.log("firebase auth error",error)
+            });
+        })
+        document.getElementById("getIdToken").addEventListener("click",()=>{
+            firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+                console.log("idToken",idToken)
+            }).catch(function(error) {
+                // Handle error
                 console.log("error",error)
             });
         })

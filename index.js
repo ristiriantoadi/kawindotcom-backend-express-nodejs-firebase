@@ -15,25 +15,36 @@ app.use(express.json())
 
 //middleware function
 function verifyToken(req,res,next){
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1]
-
-  if (token ==null){
-      return res.sendStatus(401)//unauthorized or unauthenticated
-  }
-
-  jwt.verify(token,SECRET_KEY,(err,user)=>{
-      if(err){
-          return res.sendStatus(403)//forbidden
-      }
-      req.user = user
-      next()
+  const idToken = req.headers['id-token'] // get firebase id token
+  console.log("idToken",idToken)
+  // idToken comes from the client app
+  admin
+  .auth()
+  .verifyIdToken(idToken)
+  .then((decodedToken) => {
+    const uid = decodedToken.uid;
+    // console.log("decodedToken", decodedToken)
+    // ...
+    req.decodedToken = decodedToken
+    next()
   })
+  .catch((error) => {
+    // Handle error
+    console.log("error",error)
+  });
 }
 
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
+})
+
+app.get('/dashboard',verifyToken, (req, res) => {
+  console.log("req decodedToken",req.decodedToken)
+  return res.json({
+    'message':"this is dashboard",
+    'your-email':req.decodedToken.email
+  })
 })
 
 app.post('/acara/:idAcara/invitee/baru', (req, res) => {
