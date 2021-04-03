@@ -151,7 +151,7 @@ app.post('/acara/:idAcara/edit', verifyToken, (req, res) => {
   });
 })
 
-app.post('/acara/:idAcara/delete', verifyToken, (req, res) => {
+app.post('/acara/:idAcara/hapus', verifyToken, (req, res) => {
   //delete acara
   var acaraRef = db.ref("/acara/"+req.params.idAcara);
   acaraRef.once("value", function(data) {
@@ -209,6 +209,124 @@ app.post('/acara/:idAcara/invitees/baru', verifyToken, (req, res) => {
         'message':"user tidak memiliki hak menambahkan invitees untuk acara yang dibuat user lain",
       })
     }
+  });
+})
+
+app.get('/acara/:idAcara/invitees', verifyToken, (req, res) => {
+  var acaraRef = db.ref("/acara/"+req.params.idAcara);
+  acaraRef.once("value", function(data) {
+    if(data.val() == null){
+      return res.json({
+        'message':"acara tidak ditemukan",
+      })
+    }
+    var acaraUserEmail = data.val().userEmail
+    var tokenUserEmail = req.decodedToken.email
+    if(acaraUserEmail == tokenUserEmail){
+      var inviteesRef = db.ref("/acara/"+req.params.idAcara+"/invitees");
+      inviteesRef.once("value", function(data) {
+        var inviteesData = []
+        for (var key in data.val()){
+          var invitee = data.val()[key]
+          invitee.idInvitee = key
+          inviteesData.push(invitee)
+        }
+        return res.json({
+          "invitees": inviteesData,
+          "idAcara": req.params.idAcara
+        })
+      });
+    }else{
+      return res.json({
+        'message':"user tidak memiliki hak membaca invitees untuk acara yang dibuat user lain",
+      })
+    }
+  });
+})
+
+app.post('/acara/:idAcara/invitees/:idInvitee/edit', verifyToken, (req, res) => {
+  var acaraRef = db.ref("/acara/"+req.params.idAcara);
+  acaraRef.once("value", function(data) {
+    if(data.val() == null){
+      return res.json({
+        'message':"acara tidak ditemukan",
+      })
+    }
+    var inviteeRef = db.ref("/acara/"+req.params.idAcara+"/invitees/"+req.params.idInvitee);
+    inviteeRef.once("value",function(dataInvitee){
+      if(dataInvitee.val() == null){
+        return res.json({
+          'message':"invitee tidak ditemukan",
+        })
+      }
+      var acaraUserEmail = data.val().userEmail
+      var tokenUserEmail = req.decodedToken.email
+      if(acaraUserEmail == tokenUserEmail){
+        var invitee = {}
+        invitee.namaLengkap = req.body.namaLengkap
+        invitee.email = req.body.email
+        inviteeRef.update({
+          "namaLengkap": invitee.namaLengkap,
+          "email": invitee.email
+        })
+        .then(()=>{
+          return res.json({
+            'message':"invitee berhasil diedit",
+          })
+        })
+        .catch(function(error) {
+          console.log('Error editing data:', error);
+          return res.json({
+            'message': "error edit invitee",
+          })
+        })
+      }
+      else{
+        return res.json({
+          'message':"user tidak memiliki hak menambahkan invitees untuk acara yang dibuat user lain",
+        })
+      }
+    })
+  });
+})
+
+app.post('/acara/:idAcara/invitees/:idInvitee/hapus', verifyToken, (req, res) => {
+  var acaraRef = db.ref("/acara/"+req.params.idAcara);
+  acaraRef.once("value", function(data) {
+    if(data.val() == null){
+      return res.json({
+        'message':"acara tidak ditemukan",
+      })
+    }
+    var inviteeRef = db.ref("/acara/"+req.params.idAcara+"/invitees/"+req.params.idInvitee);
+    inviteeRef.once("value",function(dataInvitee){
+      if(dataInvitee.val() == null){
+        return res.json({
+          'message':"invitee tidak ditemukan",
+        })
+      }
+      var acaraUserEmail = data.val().userEmail
+      var tokenUserEmail = req.decodedToken.email
+      if(acaraUserEmail == tokenUserEmail){
+        inviteeRef.remove()
+        .then(()=>{
+	        return res.json({
+    	      'message':"invitee berhasil dihapus",
+          })  
+        })
+        .catch(function(error) {
+          console.log('Error deleting data:', error);
+            return res.json({
+              'message': "error hapus invitee",
+            })  
+        });
+      }
+      else{
+        return res.json({
+          'message':"user tidak memiliki hak menghapus invitee untuk acara yang dibuat user lain",
+        })
+      }
+    })
   });
 })
 
