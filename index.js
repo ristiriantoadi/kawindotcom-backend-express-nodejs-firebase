@@ -65,6 +65,25 @@ app.get('/acara', verifyToken, (req, res) => {
   });
 })
 
+app.get('/acara/:idAcara', verifyToken, (req, res) => {
+  var acaraRef = db.ref("/acara/"+req.params.idAcara);
+  acaraRef.once("value", function(data) {
+    var acaraUserEmail = data.val().userEmail
+    var tokenUserEmail = req.decodedToken.email
+    if(acaraUserEmail == tokenUserEmail){
+      var acara = data.val()
+      acara.idAcara = data.key
+      return res.json({
+        'acara':data.val(),
+      })
+    }else{
+      return res.json({
+        'message':"user tidak memiliki hak membaca data acara yang dibuat user lain",
+      })
+    }
+  });
+})
+
 app.post('/acara/baru', verifyToken, (req, res) => {
     var acaraRef = db.ref("/acara");
     acaraRef.push().set({
