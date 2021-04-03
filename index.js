@@ -68,6 +68,11 @@ app.get('/acara', verifyToken, (req, res) => {
 app.get('/acara/:idAcara', verifyToken, (req, res) => {
   var acaraRef = db.ref("/acara/"+req.params.idAcara);
   acaraRef.once("value", function(data) {
+    if(data.val() == null){
+      return res.json({
+        'message':"acara tidak ditemukan",
+      })
+    }
     var acaraUserEmail = data.val().userEmail
     var tokenUserEmail = req.decodedToken.email
     if(acaraUserEmail == tokenUserEmail){
@@ -111,6 +116,11 @@ app.post('/acara/baru', verifyToken, (req, res) => {
 app.post('/acara/:idAcara/edit', verifyToken, (req, res) => {
   var acaraRef = db.ref("/acara/"+req.params.idAcara);
   acaraRef.once("value", function(data) {
+    if(data.val() == null){
+      return res.json({
+        'message':"acara tidak ditemukan",
+      })
+    }
     var acaraUserEmail = data.val().userEmail
     var tokenUserEmail = req.decodedToken.email
     if(acaraUserEmail == tokenUserEmail){
@@ -145,6 +155,11 @@ app.post('/acara/:idAcara/delete', verifyToken, (req, res) => {
   //delete acara
   var acaraRef = db.ref("/acara/"+req.params.idAcara);
   acaraRef.once("value", function(data) {
+    if(data.val() == null){
+      return res.json({
+        'message':"acara tidak ditemukan",
+      })
+    }
     var acaraUserEmail = data.val().userEmail
     var tokenUserEmail = req.decodedToken.email
     if(acaraUserEmail == tokenUserEmail){
@@ -168,10 +183,14 @@ app.post('/acara/:idAcara/delete', verifyToken, (req, res) => {
   });
 })
 
-app.post('/acara/:idAcara/invitee/baru', verifyToken, (req, res) => {
-  // var acaraRef = db.ref("/acara/"+req.params.idAcara+"/invitees");
+app.post('/acara/:idAcara/invitees/baru', verifyToken, (req, res) => {
   var acaraRef = db.ref("/acara/"+req.params.idAcara);
   acaraRef.once("value", function(data) {
+    if(data.val() == null){
+      return res.json({
+        'message':"acara tidak ditemukan",
+      })
+    }
     var acaraUserEmail = data.val().userEmail
     var tokenUserEmail = req.decodedToken.email
     if(acaraUserEmail == tokenUserEmail){
