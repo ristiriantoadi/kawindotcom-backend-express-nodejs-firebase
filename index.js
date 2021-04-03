@@ -12,6 +12,7 @@ admin.initializeApp({
 });
 
 app.use(express.json())
+var db = admin.database();
 
 //middleware function
 function verifyToken(req,res,next){
@@ -34,8 +35,6 @@ function verifyToken(req,res,next){
     })
   });
 }
-
-
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
@@ -48,8 +47,25 @@ app.get('/dashboard',verifyToken, (req, res) => {
   })
 })
 
+app.get('/acara', verifyToken, (req, res) => {
+  var acaraRef = db.ref("/acara");
+  acaraRef.once("value", function(data) {
+    var acaraData = []
+    for (var key in data.val()) {
+      var userEmail = data.val()[key].userEmail
+      if(userEmail == req.decodedToken.email){
+        var acara  = data.val()[key]
+        acara.idAcara = key
+        acaraData.push(acara)
+      } 
+    }
+    return res.json({
+      "acaras": acaraData
+    })
+  });
+})
+
 app.post('/acara/baru', verifyToken, (req, res) => {
-    var db = admin.database();
     var acaraRef = db.ref("/acara");
     acaraRef.push().set({
         "namaPria": req.body.namaPria,
@@ -67,7 +83,6 @@ app.post('/acara/baru', verifyToken, (req, res) => {
 })
 
 app.post('/acara/:idAcara/edit', verifyToken, (req, res) => {
-  var db = admin.database();
   var acaraRef = db.ref("/acara/"+req.params.idAcara);
   acaraRef.once("value", function(data) {
     var acaraUserEmail = data.val().userEmail
@@ -94,7 +109,6 @@ app.post('/acara/:idAcara/edit', verifyToken, (req, res) => {
 
 app.post('/acara/:idAcara/delete', verifyToken, (req, res) => {
   //delete acara
-  var db = admin.database();
   var acaraRef = db.ref("/acara/"+req.params.idAcara);
   acaraRef.once("value", function(data) {
     var acaraUserEmail = data.val().userEmail
@@ -122,7 +136,6 @@ app.post('/acara/:idAcara/delete', verifyToken, (req, res) => {
 })
 
 app.post('/acara/:idAcara/invitee/baru', verifyToken, (req, res) => {
-  var db = admin.database();
   // var acaraRef = db.ref("/acara/"+req.params.idAcara+"/invitees");
   var acaraRef = db.ref("/acara/"+req.params.idAcara);
   acaraRef.once("value", function(data) {
@@ -145,18 +158,11 @@ app.post('/acara/:idAcara/invitee/baru', verifyToken, (req, res) => {
       })
     }
   });
-  // req.body.invitees.forEach((invitee)=>{
-  //     acaraRef.push().set({
-  //         "namaLengkap": invitee.namaLengkap,
-  //         "email": invitee.email
-  //     });    
-  
-  // });
-  // return res.json({
-  //   'message':"invitees ditambahkan",
-  // })
 })
 
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname + '/login.html'));
+})
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
