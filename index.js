@@ -94,11 +94,18 @@ app.post('/acara/baru', verifyToken, (req, res) => {
         "dresscode": req.body.dresscode,
         "waktuAcara": req.body.waktuAcara,
         "userEmail":req.decodedToken.email
-    });
-
-    return res.json({
-      'message':"acara baru ditambahkan",
     })
+    .then(()=>{
+      return res.json({
+        'message':"acara baru ditambahkan",
+      })
+    })
+    .catch(function(error) {
+      console.log('Error deleting data:', error);
+      return res.json({
+        'message': "error buat acara baru",
+      })  
+    });
 })
 
 app.post('/acara/:idAcara/edit', verifyToken, (req, res) => {
@@ -107,17 +114,25 @@ app.post('/acara/:idAcara/edit', verifyToken, (req, res) => {
     var acaraUserEmail = data.val().userEmail
     var tokenUserEmail = req.decodedToken.email
     if(acaraUserEmail == tokenUserEmail){
-      acaraRef.update({
-        "namaPria": req.body.namaPria,
-        "namaWanita":req.body.namaWanita,
-        "latitude":req.body.latitude,
-        "longitude": req.body.longitude,
-        "dresscode": req.body.dresscode,
-        "waktuAcara": req.body.waktuAcara
+        acaraRef.update({
+          "namaPria": req.body.namaPria,
+          "namaWanita":req.body.namaWanita,
+          "latitude":req.body.latitude,
+          "longitude": req.body.longitude,
+          "dresscode": req.body.dresscode,
+          "waktuAcara": req.body.waktuAcara
+        })
+        .then(()=>{
+          return res.json({
+            'message':"acara berhasil diedit",
+          })
+        })
+        .catch(function(error) {
+          console.log('Error editing data:', error);
+          return res.json({
+          'message': "error edit acara",
+        })  
       });
-      return res.json({
-        'message':"acara berhasil diedit",
-      })
     }else{
       return res.json({
         'message':"user tidak memiliki hak mengedit acara yang dibuat user lain",
@@ -141,7 +156,6 @@ app.post('/acara/:idAcara/delete', verifyToken, (req, res) => {
       })
       .catch(function(error) {
         console.log('Error deleting data:', error);
-        // res.send({ status: 'error', error: error });
         return res.json({
           'message': "error hapus data",
         })  
