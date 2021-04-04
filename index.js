@@ -4,15 +4,26 @@ const port = process.env.PORT || 5000
 const https = require('https')
 const path = require('path');
 
+//firebase setup
 var admin = require('firebase-admin');
 var serviceAccount = require("./serviceAccountKey.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://angular-96299.firebaseio.com"
 });
+var db = admin.database();
+
+//nodemailer setup
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'kawindotcom.undangan@gmail.com',
+    pass: 'farhanwilhamadi' // naturally, replace both with your real credentials or an application-specific password
+  }
+});
 
 app.use(express.json())
-var db = admin.database();
 
 //middleware function
 function verifyToken(req,res,next){
@@ -212,6 +223,7 @@ app.post('/acara/:idAcara/invitees/baru', verifyToken, (req, res) => {
   });
 })
 
+//get invitees
 app.get('/acara/:idAcara/invitees', verifyToken, (req, res) => {
   var acaraRef = db.ref("/acara/"+req.params.idAcara);
   acaraRef.once("value", function(data) {
@@ -328,6 +340,55 @@ app.post('/acara/:idAcara/invitees/:idInvitee/hapus', verifyToken, (req, res) =>
       }
     })
   });
+})
+
+app.post('/acara/:idAcara/invitees/kirim-undangan', verifyToken, (req, res) => {
+  var acaraRef = db.ref("/acara/"+req.params.idAcara);
+  acaraRef.once("value", function(data) {
+    if(data.val() == null){
+      return res.json({
+        'message':"acara tidak ditemukan",
+      })
+    }
+    var acaraUserEmail = data.val().userEmail
+    var tokenUserEmail = req.decodedToken.email
+    if(acaraUserEmail == tokenUserEmail){
+      var inviteesRef = db.ref("/acara/"+req.params.idAcara+"/invitees");
+      inviteesRef.once("value", function(dataInvitees) {
+        var toEmailsString = ""
+        for (var key in dataInvitees.val()){
+          var invitee = dataInvitees.val()[key]
+          toEmailsString+=invitee.email+", "
+        }
+        
+        var textMessage = "Undangan Pernikahan atas nama "+data.val().namaPria+" dan "+data.val().namaWanita+". Silakan Hadir"
+
+        const mailOptions = {
+          from: 'kawindotcom.undangan@gmail.com',
+          to: toEmailsString,
+          subject: 'Undangan Pernikahan',
+          text: textMessage
+        };
+        
+        transporter.sendMail(mailOptions, function(error, info){
+          if (error) {
+            console.log(error);
+            return res.json({
+              "message":"Error kirim undangan"
+            })
+          } else {
+            return res.json({
+              "message":"Undangan berhasil dikirim"
+            })
+          }
+        });
+      });
+    }else{
+      return res.json({
+        'message':"user tidak memiliki hak mengirim undangan untuk invitees dari acara lain",
+      })
+    }
+  });  
 })
 
 app.get('/login', (req, res) => {
