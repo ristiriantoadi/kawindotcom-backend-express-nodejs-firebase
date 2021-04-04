@@ -355,33 +355,31 @@ app.post('/acara/:idAcara/invitees/kirim-undangan', verifyToken, (req, res) => {
     if(acaraUserEmail == tokenUserEmail){
       var inviteesRef = db.ref("/acara/"+req.params.idAcara+"/invitees");
       inviteesRef.once("value", function(dataInvitees) {
-        var toEmailsString = ""
+        var failedMessages = []
+        var successMessages = []
         for (var key in dataInvitees.val()){
           var invitee = dataInvitees.val()[key]
-          toEmailsString+=invitee.email+", "
+          var textMessage = `Undangan Pernikahan atas nama ${data.val().namaPria} dan ${data.val().namaWanita}. Informasi lebih lanjut: http://localhost:5000/acara/${req.params.idAcara}/invitees/${key}/undangan`
+          
+          var mailOptions = {
+            from: 'kawindotcom.undangan@gmail.com',
+            to: invitee.email,
+            subject: 'Undangan Pernikahan',
+            text: textMessage
+          };
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+              failedMessages.push(invitee)
+            } else {
+              successMessages.push(invitee)
+              // console.log("success")
+            }
+          });
         }
-        
-        var textMessage = "Undangan Pernikahan atas nama "+data.val().namaPria+" dan "+data.val().namaWanita+". Silakan Hadir"
-
-        const mailOptions = {
-          from: 'kawindotcom.undangan@gmail.com',
-          to: toEmailsString,
-          subject: 'Undangan Pernikahan',
-          text: textMessage
-        };
-        
-        transporter.sendMail(mailOptions, function(error, info){
-          if (error) {
-            console.log(error);
-            return res.json({
-              "message":"Error kirim undangan"
-            })
-          } else {
-            return res.json({
-              "message":"Undangan berhasil dikirim"
-            })
-          }
-        });
+        return res.json({
+          "messages":"undangan telah dikirim"
+        })
       });
     }else{
       return res.json({
@@ -389,6 +387,38 @@ app.post('/acara/:idAcara/invitees/kirim-undangan', verifyToken, (req, res) => {
       })
     }
   });  
+})
+
+app.get('/acara/:idAcara/invitees/:idInvitee/undangan', (req, res) => {
+  var acaraRef = db.ref("/acara/"+req.params.idAcara);
+  acaraRef.once("value", function(acaraData) {
+    if(acaraData.val() == null){
+      return res.json({
+        'message':"acara tidak ditemukan",
+      })
+    }
+    var inviteeRef = db.ref("/acara/"+req.params.idAcara+"/invitees/"+req.params.idInvitee);
+    inviteeRef.once("value",function(inviteeData){
+      if(inviteeData.val() == null){
+        return res.json({
+          'message':"invitee tidak ditemukan",
+        })
+      }
+      var dataInvitee = inviteeData.val()
+      var dataAcara = {}
+      dataAcara.dresscode = acaraData.val().dresscode
+      dataAcara.latitude = acaraData.val().latitude
+      dataAcara.longitude = acaraData.val().longitude
+      dataAcara.namaPria = acaraData.val().namaPria
+      dataAcara.namaWanita = acaraData.val().namaWanita
+      dataAcara.waktuAcara = acaraData.val().waktuAcara
+
+      return res.json({
+        dataInvitee,
+        dataAcara
+      })
+    })  
+  });
 })
 
 app.get('/login', (req, res) => {
