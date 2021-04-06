@@ -4,6 +4,10 @@ const port = process.env.PORT || 5000
 const https = require('https')
 const path = require('path');
 
+//setup cors
+const cors = require('cors')
+app.use(cors())
+
 //firebase setup
 var admin = require('firebase-admin');
 var serviceAccount = require("./serviceAccountKey.json");
