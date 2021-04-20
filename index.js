@@ -3,6 +3,7 @@ const app = express()
 const port = process.env.PORT || 5000
 const https = require('https')
 const path = require('path');
+const fileUpload = require('express-fileupload');
 
 //setup cors
 const cors = require('cors')
@@ -13,9 +14,13 @@ var admin = require('firebase-admin');
 var serviceAccount = require("./serviceAccountKey.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://angular-96299.firebaseio.com"
+  databaseURL: "https://angular-96299.firebaseio.com",
+  storageBucket: "angular-96299.appspot.com"
 });
 var db = admin.database();
+
+var bucket = admin.storage().bucket();
+
 
 //nodemailer setup
 const nodemailer = require('nodemailer');
@@ -28,6 +33,11 @@ const transporter = nodemailer.createTransport({
 });
 
 app.use(express.json())
+
+// enable files upload  / setup file upload
+app.use(fileUpload({
+  createParentPath: true
+}));
 
 //middleware function
 function verifyToken(req,res,next){
@@ -196,6 +206,63 @@ app.post('/acara/:idAcara/hapus', verifyToken, (req, res) => {
       })
     }
   });
+})
+
+app.get('/acara/:idAcara/gallery/add', (req, res) => {
+  //only authenticated user can add new picture to their gallery
+  // how many pictures can they add in one go?
+  // i mean, each acara have ONE galery. the gallery will have UNLIMITED number of pictures
+  //how many pictures each time upload one time?
+
+  //can you add multiple pictures at the same time
+  //how
+
+  res.sendFile(path.join(__dirname + '/gallery.html'));
+
+})
+
+app.post('/acara/:idAcara/gallery/add', async (req, res) => {
+  try {
+    if(!req.files) {
+      console.log("error called")
+      return res.json({
+            status: false,
+            message: 'No file uploaded'
+        });
+    } else {
+        let data = []; 
+        req.files.photos.forEach((item,index)=>{
+          let photo = item;
+          const blob = bucket.file(`${req.params.idAcara}/${photo.name}`)
+          const blobWriter = blob.createWriteStream({
+            metadata: {
+                contentType: photo.mimetype
+            }
+          })
+          blobWriter.on('error', (err) => {
+            console.log(err)
+          })
+          blobWriter.on('finish', () => {
+            //push file details
+            data.push({
+              name: photo.name,
+              mimetype: photo.mimetype,
+              size: photo.size
+            });
+          })
+          blobWriter.end(photo.buffer)
+        });
+
+        //return response
+        return res.json({
+            status: true,
+            message: 'Files are uploaded'
+        });
+    }
+  } catch (err) {
+    console.log("err",err)
+    res.status(500).send(err);
+  }
 })
 
 app.post('/acara/:idAcara/invitees/baru', verifyToken, (req, res) => {
