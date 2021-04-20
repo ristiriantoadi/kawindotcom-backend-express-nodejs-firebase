@@ -18,7 +18,6 @@ admin.initializeApp({
   storageBucket: "angular-96299.appspot.com"
 });
 var db = admin.database();
-
 var bucket = admin.storage().bucket();
 
 
@@ -243,11 +242,20 @@ app.post('/acara/:idAcara/gallery/add', async (req, res) => {
             console.log(err)
           })
           blobWriter.on('finish', () => {
-            //push file details
-            data.push({
-              name: photo.name,
-              mimetype: photo.mimetype,
-              size: photo.size
+            //after this, what do you do
+            //you gotta add the link of the file into the acara
+            const url = `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+            // console.log("url",url)
+
+            var acaraRef = db.ref("/acara/"+req.params.idAcara+"/gallery");
+            acaraRef.push().update({
+              "url":url
+            })
+            .then(()=>{
+              
+            })
+            .catch(function(error) {
+              console.log('Error adding url data:', error); 
             });
           })
           blobWriter.end(photo.buffer)
