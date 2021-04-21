@@ -242,11 +242,8 @@ app.post('/acara/:idAcara/gallery/add', async (req, res) => {
             console.log(err)
           })
           blobWriter.on('finish', () => {
-            //after this, what do you do
-            //you gotta add the link of the file into the acara
+            //add the link of the file into the acara
             const url = `https://storage.googleapis.com/${bucket.name}/${blob.name}`
-            // console.log("url",url)
-
             var acaraRef = db.ref("/acara/"+req.params.idAcara+"/gallery");
             acaraRef.push().update({
               "url":url
@@ -271,6 +268,48 @@ app.post('/acara/:idAcara/gallery/add', async (req, res) => {
     console.log("err",err)
     res.status(500).send(err);
   }
+})
+
+app.post('/acara/:idAcara/gallery/:idPhoto/delete', (req, res) => {
+  var photoRef = db.ref("/acara/"+req.params.idAcara+"/gallery/"+req.params.idPhoto);
+  photoRef.once("value", async function(data) {
+    var fileUrl = data.val().url
+    var pieces = fileUrl.split('/')
+    var filename = pieces[pieces.length-1]
+    
+    // Create a reference to the file to delete
+    // var fileRef = admin.storage().refFromURL(fileUrl);
+
+    await bucket.file(`${req.params.idAcara}/${filename}`).delete();
+    console.log(`file ${filename} deleted`);
+    
+    // console.log("File in database before delete exists : " 
+    //     + fileRef.exists())
+    // Delete the file using the delete() method 
+    // fileRef.delete().then(function () {
+    //   // File deleted successfully
+    //   console.log("File Deleted")
+    // }).catch(function (error) {
+    //     // Some Error occurred
+    //     console.log("error delete file")
+    // });
+    
+    // console.log("File in database after delete exists : "
+    //       + fileRef.exists())
+    
+    photoRef.remove()
+    .then(()=>{
+      return res.json({
+        'message':`foto ${filename} berhasil dihapus`,
+      })  
+    })
+    .catch(function(error) {
+      console.log('Error deleting data:', error);
+      return res.json({
+          'message': "error hapus foto",
+      })  
+    });
+  });
 })
 
 app.post('/acara/:idAcara/invitees/baru', verifyToken, (req, res) => {
